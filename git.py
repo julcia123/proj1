@@ -18,28 +18,28 @@ class Transformations:
                 + Elipsoida Krasowskiego:
         """
         if model == "WGS84":
-            self_1 = 6378137.000
-            self_2 = 0.00669438002290
+            self.a = 6378137.000
+            self.e2 = 0.00669438002290
         elif model == "GRS80":
-            self_1 = 6378137.000
-            self_2 = 6356752.31414036
+            self.a = 6378137.000
+            self.e2 = 6356752.31414036
         elif model == "Elipsoida Krasowskiego":
-            self_1 = 6378245.000
-            self_2 = 0.00669342162296
+            self.a = 6378245.000
+            self.e2 = 0.00669342162296
     #Pomocnicze funkcje
         """
         Poniższe funkcje są funkcjami pomocniczymi dla obliczeń transformacji
         """
-        def Npu(fi, a ,e2):     #promien krzywizny w I wertykale
-            N = a / np.sqrt(1 - e2 * np.sin(fi)**2)
+        def Npu(self, fi, output: 'dec_degree'):     #promien krzywizny w I wertykale
+            N = self.a / np.sqrt(1 - self.e2 * np.sin(fi)**2)
         return(N)
 
-        def Sigma(fi, a, e2):
-            A0 = 1 - (e2/4) - (3*(e2)**2)/64 -  (5*(e2)**3)/256
-            A2 = 3/8 * (e2 + (e2)**2/4 + 15*(e2)**3/128)
-            A4 = 15/256 * ( (e2)**2 + (3*((e2)**3))/4 )
-            A6 = 35 * (e2)**3 / 3072
-            sigma = a * ( A0 * fi - A2 * np.sin(2*fi) + A4 * np.sin(4*fi) - A6 * np.sin(6*fi) )
+        def Sigma(self, fi, output: 'dec_degree'):
+            A0 = 1 - (self.e2/4) - (3*(self.e2)**2)/64 -  (5*(self.e2)**3)/256
+            A2 = 3/8 * (self.e2 + (self.e2)**2/4 + 15*(self.e2)**3/128)
+            A4 = 15/256 * ( (self.e2)**2 + (3*((self.e2)**3))/4 )
+            A6 = 35 * (self.e2)**3 / 3072
+            sigma = self.a * ( A0 * fi - A2 * np.sin(2*fi) + A4 * np.sin(4*fi) - A6 * np.sin(6*fi) )
            
             return(sigma)
         
@@ -50,38 +50,37 @@ class Transformations:
             """
         def hirvonen(self, X, Y, Z, output: 'dec_degree'):
             p = np.sqrt(X**2 + Y**2)
-            fi = np.arctan(Z / (p * (1 - e2)))
+            fi = np.arctan(Z / (p * (1 - self.e2)))
             while True:
-                N = Npu(fi, a, e2)
+                N = self.Npu(fi)
                 h = p / np.cos(fi) - N
                 fip = fi     #fip - fi poprzednie, fi - fi nowe
-                fi = np.arctan(Z / (p * (1 - N * e2 / (N + h))))
+                fi = np.arctan(Z / (p * (1 - N * self.e2 / (N + h))))
                 if abs(fip - fi) < (0.000001/206265):
                     break
-<<<<<<< HEAD
+
             lam = np.arctan2(Y, X)
             return(fi, lam, h)
 
 
         # BLH ---> XYZ
 
-        def filh2XYZ(fi, lam, h, a, e2):
-=======
-            l = np.arctan2(Y, X)
-            return(fi, l, h)
+        def filh2XYZ(self, fi, lam, h, output: 'dec_degree'):
+
+            lam = np.arctan2(Y, X)
+            return(fi, lam, h)
 
         # BLH ---> XYZ
             """
            Algorytm przelicza współrzędne geodezyjne (BLH) na współrzędne w układzie ortokartezjańskim (XYZ)
             """
-        def filh2XYZ(self, fi, l, h, output: 'dec_degree'):
->>>>>>> 229398f406e11cf45e67282d4c3abf12fc354634
+        def filh2XYZ(self, fi, lam, h, output: 'dec_degree'):
             while True:
-                N = Npu(fi, a, e2)
+                N = self.Npu(fi)
                 X = (N + h) * np.cos(fi) * np.cos(lam)
                 Xp = X
                 Y = (N + h) * np.cos(fi) * np.sin(lam)
-                Z = (N * (1 - e2) + h) * np.sin(fi)
+                Z = (N * (1 - self.e2) + h) * np.sin(fi)
                 if abs(Xp - X) < (0.000001/206265):
                     break
             return(X, Y, Z)
@@ -112,9 +111,9 @@ class Transformations:
              else:
                  print("Punkt poza strefami odwzorowawczymi układu PL-2000")        
              
-             b2 = (a**2) * (1-e2)   #krotsza polos
+             b2 = (self.a**2) * (1-self.e2)   #krotsza polos
              
-             e2p = ( a**2 - b2 ) / b2   #drugi mimosrod elipsy
+             e2p = ( self.a**2 - b2 ) / b2   #drugi mimosrod elipsy
              
              dlam = lam - lam0
              
@@ -122,9 +121,9 @@ class Transformations:
              
              ni = np.sqrt(e2p * (np.cos(fi))**2)
              
-             N = Npu(fi, a, e2)
+             N = self.Npu(fi)
              
-             sigma = Sigma(fi, a, e2)
+             sigma = self.Sigma(fi)
 
              
              
