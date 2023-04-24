@@ -42,6 +42,44 @@ class Transformations:
             sigma = a * ( A0 * fi - A2 * np.sin(2*fi) + A4 * np.sin(4*fi) - A6 * np.sin(6*fi) )
            
             return(sigma)
+        
+        # XYZ ---> BLH - ALGORYTM HIRVONENA
+
+        def hirvonen(X, Y, Z, a, e2):
+            p = np.sqrt(X**2 + Y**2)
+            fi = np.arctan(Z / (p * (1 - e2)))
+            while True:
+                N = Npu(fi, a, e2)
+                h = p / np.cos(fi) - N
+                fip = fi     #fip - fi poprzednie, fi - fi nowe
+                fi = np.arctan(Z / (p * (1 - N * e2 / (N + h))))
+                if abs(fip - fi) < (0.000001/206265):
+                    break
+            l = np.arctan2(Y, X)
+            return(fi, l, h)
+
+
+
+
+        # BLH ---> XYZ
+
+        def filh2XYZ(fi, l, h, a, e2):
+            while True:
+                N = Npu(fi, a, e2)
+                X = (N + h) * np.cos(fi) * np.cos(l)
+                Xp = X
+                Y = (N + h) * np.cos(fi) * np.sin(l)
+                Z = (N * (1 - e2) + h) * np.sin(fi)
+                if abs(Xp - X) < (0.000001/206265):
+                    break
+            return(X, Y, Z)
+
+
+
+
+        # XYZ ---> NEU
+        
+        
         #Transformacja współrzędnych BL -> 2000
             """
             Następujący algorytm umożliwia przeliczenie współrzędnych geodezyjnych na współrzędne ortokartezjańskie w układzie 2000
