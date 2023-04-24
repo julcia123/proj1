@@ -44,8 +44,10 @@ class Transformations:
             return(sigma)
         
         # XYZ ---> BLH - ALGORYTM HIRVONENA
-
-        def hirvonen(X, Y, Z, a, e2):
+            """
+            Następujący algorytm przelicza współrzędne z układu ortokartezjańskiego na współrzędne geodezyjne.
+            """
+        def hirvonen(self, X, Y, Z, output: 'dec_degree'):
             p = np.sqrt(X**2 + Y**2)
             fi = np.arctan(Z / (p * (1 - e2)))
             while True:
@@ -58,12 +60,11 @@ class Transformations:
             l = np.arctan2(Y, X)
             return(fi, l, h)
 
-
-
-
         # BLH ---> XYZ
-
-        def filh2XYZ(fi, l, h, a, e2):
+            """
+           Algorytm przelicza współrzędne geodezyjne (BLH) na współrzędne w układzie ortokartezjańskim (XYZ)
+            """
+        def filh2XYZ(self, fi, l, h, output: 'dec_degree'):
             while True:
                 N = Npu(fi, a, e2)
                 X = (N + h) * np.cos(fi) * np.cos(l)
@@ -74,15 +75,12 @@ class Transformations:
                     break
             return(X, Y, Z)
 
-
-
-
         # XYZ ---> NEU
         
         
         #Transformacja współrzędnych BL -> 2000
             """
-            Następujący algorytm umożliwia przeliczenie współrzędnych geodezyjnych na współrzędne ortokartezjańskie w układzie 2000
+            Następujący algorytm umożliwia przeliczenie współrzędnych geodezyjnych (BLH) na współrzędne w układzie 2000 (XY)
             """
         def cale00(self, fi, lam, output: 'dec_degree'):
              m=0.999923
