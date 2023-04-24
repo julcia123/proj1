@@ -88,6 +88,44 @@ class Transformations:
         # XYZ ---> NEU
         
         
+        
+        
+        
+        
+        # Transformacja wsp BL -> 1992
+            """
+            Algorytm przelicza współrzędne geodezyjne (BL) na współrzędne w układzie 1992 (XY)
+            """
+            def cale92(self,fi, lam):
+                lam0 = (19*np.pi)/180
+                
+                m = 0.9993
+                
+                b2 = (self.a**2) * (1-self.e2)   #krotsza polos
+                
+                e2p = (self.a**2 - b2 ) / b2   #drugi mimosrod elipsy
+                
+                dlam = lam - lam0
+                
+                t = np.tan(fi)
+                
+                ni = np.sqrt(e2p * (np.cos(fi))**2)
+                
+                N = self.Npu(fi)
+                
+                sigma = self.Sigma(fi)
+
+                
+                
+                xgk = sigma + ((dlam**2)/2)*N*np.sin(fi)*np.cos(fi) * ( 1+ ((dlam**2)/12)*(np.cos(fi))**2 * ( 5 - (t**2)+9*(ni**2) + 4*(ni**4)     )  + ((dlam**4)/360)*(np.cos(fi)**4) * (61-58*(t**2)+(t**4) + 270*(ni**2) - 330*(ni**2)*(t**2))  )
+                ygk = (dlam*N* np.cos(fi)) * (1+(((dlam)**2/6)*(np.cos(fi))**2) *(1-(t**2)+(ni**2))+((dlam**4)/120)*(np.cos(fi)**4)*(5-18*(t**2)+(t**4)+14*(ni**2)-58*(ni**2)*(t**2)) )
+                
+                x92 = xgk*m - 5300000
+                y92 = ygk*m + 500000
+                
+                return(x92, y92)
+            
+            
         #Transformacja współrzędnych BL -> 2000
             """
             Następujący algorytm umożliwia przeliczenie współrzędnych geodezyjnych (BLH) na współrzędne w układzie 2000 (XY)
