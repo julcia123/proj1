@@ -43,6 +43,7 @@ class Transformations:
            
             return(sigma)
         
+        
         # XYZ ---> BLH - ALGORYTM HIRVONENA
 
         def hirvonen(X, Y, Z, a, e2):
@@ -55,20 +56,18 @@ class Transformations:
                 fi = np.arctan(Z / (p * (1 - N * e2 / (N + h))))
                 if abs(fip - fi) < (0.000001/206265):
                     break
-            l = np.arctan2(Y, X)
-            return(fi, l, h)
-
-
+            lam = np.arctan2(Y, X)
+            return(fi, lam, h)
 
 
         # BLH ---> XYZ
 
-        def filh2XYZ(fi, l, h, a, e2):
+        def filh2XYZ(fi, lam, h, a, e2):
             while True:
                 N = Npu(fi, a, e2)
-                X = (N + h) * np.cos(fi) * np.cos(l)
+                X = (N + h) * np.cos(fi) * np.cos(lam)
                 Xp = X
-                Y = (N + h) * np.cos(fi) * np.sin(l)
+                Y = (N + h) * np.cos(fi) * np.sin(lam)
                 Z = (N * (1 - e2) + h) * np.sin(fi)
                 if abs(Xp - X) < (0.000001/206265):
                     break
