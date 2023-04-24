@@ -26,6 +26,8 @@ class Transformations:
         elif model == "Elipsoida Krasowskiego":
             self.a = 6378245.000
             self.e2 = 0.00669342162296
+        else:
+            raise AttributeError(f"Jesli napisałes małymi literami, spróbuj napisać wielkimi")
     #Pomocnicze funkcje
         """
         Poniższe funkcje są funkcjami pomocniczymi dla obliczeń transformacji
@@ -263,3 +265,5 @@ if __name__ == "__main__":
     X = 3664940.500; Y = 1409153.590; Z = 5009571.170
     FI, LAM, H = geo.hirvonen(X, Y, Z, output='decimal_degree')
     print(FI, LAM, H)
+
+
