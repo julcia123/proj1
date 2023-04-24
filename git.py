@@ -36,7 +36,7 @@ class Transformations:
         N = self.a / np.sqrt(1 - self.e2 * np.sin(fi)**2)
         return(N)
 
-    def Sigma(self, fi, output: 'dec_degree'):
+    def Sigma(self, fi):
         A0 = 1 - (self.e2/4) - (3*(self.e2)**2)/64 -  (5*(self.e2)**3)/256
         A2 = 3/8 * (self.e2 + (self.e2)**2/4 + 15*(self.e2)**3/128)
         A4 = 15/256 * ( (self.e2)**2 + (3*((self.e2)**3))/4 )
@@ -44,6 +44,19 @@ class Transformations:
         sigma = self.a * ( A0 * fi - A2 * np.sin(2*fi) + A4 * np.sin(4*fi) - A6 * np.sin(6*fi) )
            
         return(sigma)
+    
+    def dms(self, x):     #funkcja w stopniach, minutach i sekundach
+        znak = ' '
+        if x < 0:
+            znak = '-'
+            x = abs(x)
+        x = x * 180/np.pi
+        d = int(x)
+        m = int((x - d) * 60)
+        s = (x - d - m / 60) * 3600
+        print(znak, "%3d %2d %7.5f" %(d, m, s))     #d - l.calkowita, f - l.rzeczywista
+
+    
         
         
         
@@ -51,7 +64,7 @@ class Transformations:
         """
             Następujący algorytm przelicza współrzędne z układu ortokartezjańskiego na współrzędne geodezyjne.
         """
-    def hirvonen(self, X, Y, Z, output: 'dec_degree'):
+    def hirvonen(self, X, Y, Z, output: 'dms'):
         p = np.sqrt(X**2 + Y**2)
         fi = np.arctan(Z / (p * (1 - self.e2)))
         while True:
@@ -71,7 +84,7 @@ class Transformations:
         """
             Algorytm przelicza współrzędne geodezyjne (BLH) na współrzędne w układzie ortokartezjańskim (XYZ)
         """
-    def filh2XYZ(self, fi, lam, h, output: 'dec_degree'):
+    def filh2XYZ(self, fi, lam, h):
         while True:
             N = self.Npu(fi)
             X = (N + h) * np.cos(fi) * np.cos(lam)
@@ -214,7 +227,7 @@ class Transformations:
         """
             Następujący algorytm umożliwia przeliczenie współrzędnych geodezyjnych (BLH) na współrzędne w układzie 2000 (XY)
         """
-    def cale00(self, fi, lam, output: 'dec_degree'):
+    def cale00(self, fi, lam):
         m=0.999923
         lam0=0 
         strefa = 0
