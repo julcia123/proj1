@@ -70,17 +70,28 @@ class Transformations:
            
         return(sigma)
     
-    def dms(self, x):     #funkcja w stopniach, minutach i sekundach
-        znak = ' '
-        if x < 0:
-            znak = '-'
-            x = abs(x)
-        x = x * 180/np.pi
-        d = int(x)
-        m = int((x - d) * 60)
-        s = (x - d - m / 60) * 3600
-        print(znak, "%3d %2d %7.5f" %(d, m, s))     #d - l.calkowita, f - l.rzeczywista
-
+    def dms2deg(self, dms):
+        '''
+        This method convert deg, min, sek to decimal degree
+        '''
+        d = dms[0]; m = dms[1]; s = dms[2]
+        decimal_degree = d+m/60+s/3600
+        return (decimal_degree)
+    
+    def deg2dms(self, decimal_degree):
+        '''
+        This method convert decimal degree to deg, min, sek   
+        '''
+        decimal_degree = decimal_degree / 3600
+        dms = np.array([])
+        st = np.floor(decimal_degree)
+        append(dms, st)
+        m = np.floor((decimal_degree - st)*60)
+        append(dms, m)
+        sek = (decimal_degree - st - m/60)*3600
+        append(dms, sek)
+        print(dms)
+        return (dms)
     
         
         
@@ -296,14 +307,34 @@ class Transformations:
         return(x00, y00)  
          
             
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Proszę wpisać tutaj współrzędne w zależnosci od tego, co chcesz policzyć: XYZ->BLH, lub BLH->XYZ; FL->układ 1992, lub FL->układ 2000)')
-    parser.add_argument('-a', '--argument', help = "Ten argument jest opcjonalny", required = False)
-    parser.add_argument('X', type = float, help = "Współrzędna X")
-    parser.add_argument('Y', type = float, help = "Współrzędna Y")
-    parser.add_argument('Z', type = float, help = "Współrzędna Z")
-    args = parser.parse_args()
-    geo = Transformations(model = "WGS84")
-    FI, LAM, H = geo.hirvonen(X, Y, Z, output = 'dec_degree')
+#if __name__ == "__main__":
+#    parser = argparse.ArgumentParser(description='Proszę wpisać tutaj współrzędne w zależnosci od tego, co chcesz policzyć: XYZ->BLH, lub BLH->XYZ; FL->układ 1992, lub FL->układ 2000)')
+#    parser.add_argument('-a', '--argument', help = "Ten argument jest opcjonalny", required = False)
+#    parser.add_argument('X', type = float, help = "Współrzędna X")
+#    parser.add_argument('Y', type = float, help = "Współrzędna Y")
+#    parser.add_argument('Z', type = float, help = "Współrzędna Z")
+#    args = parser.parse_args()
+#    geo = Transformations(model = "WGS84")
+#    FI, LAM, H = geo.hirvonen(X, Y, Z, output = 'dec_degree')
 # quit() #nwm co to dodało mi się to jak zaimportowałam biblioteke argparse
+
+if __name__ == "__main__":
+    # Tworzenie parsera argumentów
+    
+    parser = argparse.ArgumentParser(description="Przykładowy program z użyciem argparse")
+    parser.add_argument("--model", type=str, default="WGS84", choices=["WGS84", "GRS80", "Krasowski"],
+                        help="Model elipsoidy (domyślnie: WGS84)")
+    parser.add_argument("--X", type=float, help="Wartość X")
+    parser.add_argument("--Y", type=float, help="Wartość Y")
+    parser.add_argument("--Z", type=float, help="Wartość Z")
+    parser.add_argument("--output", type=str, default="dec_degree", choices=["dec_degree", "dms"],
+                        help="Format wyników (domyślnie: dec_degree)")
+    args = parser.parse_args()
+
+    # Tworzenie instancji klasy Transformacje na podstawie podanych argumentów
+    transformations = Transformations(args.model)
+
+    # Wywołanie odpowiednich funkcji na podstawie przekazanych argumentów
+    wynik = transformations.hirvonen(args.X, args.Y, args.Z, args.output)
+
 
