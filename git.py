@@ -214,6 +214,20 @@ class Transformations:
         y00 = ygk * m + strefa*1000000 + 500000
              
         return(x00, y00)  
+    
+    
+    
+    def pliczek(self, plik, funkcja: type = "str"):
+        data = open(plik, 'r')
+        important = data.readlines()
+        lines = important.split("\n")
+        XYZ = []
+        for el in lines:
+            wsp = el.split( )
+            
+        
+        # if funkcja == "XYZ_BLH":
+            
          
             
 #if __name__ == "__main__":
@@ -227,23 +241,23 @@ class Transformations:
 #    FI, LAM, H = geo.hirvonen(X, Y, Z, output = 'dec_degree')
 # quit() #nwm co to dodało mi się to jak zaimportowałam biblioteke argparse
 
-if __name__ == "__main__":
-    # Tworzenie parsera argumentów
+# if __name__ == "__main__":
+#     # Tworzenie parsera argumentów
     
-    parser = argparse.ArgumentParser(description="Przykładowy program z użyciem argparse")
-    parser.add_argument("--model", type=str, default="WGS84", choices=["WGS84", "GRS80", "Krasowski"],
-                        help="Model elipsoidy (domyślnie: WGS84)")
-    parser.add_argument("--X", type=float, help="Wartość X")
-    parser.add_argument("--Y", type=float, help="Wartość Y")
-    parser.add_argument("--Z", type=float, help="Wartość Z")
-    parser.add_argument("--output", type=str, default="dec_degree", choices=["dec_degree", "dms"],
-                        help="Format wyników (domyślnie: dec_degree)")
-    args = parser.parse_args()
+#     parser = argparse.ArgumentParser(description="Przykładowy program z użyciem argparse")
+#     parser.add_argument("--model", type=str, default="WGS84", choices=["WGS84", "GRS80", "Krasowski"],
+#                         help="Model elipsoidy (domyślnie: WGS84)")
+#     parser.add_argument("--X", type=float, help="Wartość X")
+#     parser.add_argument("--Y", type=float, help="Wartość Y")
+#     parser.add_argument("--Z", type=float, help="Wartość Z")
+#     parser.add_argument("--output", type=str, default="dec_degree", choices=["dec_degree", "dms"],
+#                         help="Format wyników (domyślnie: dec_degree)")
+#     args = parser.parse_args()
 
-    # Tworzenie instancji klasy Transformacje na podstawie podanych argumentów
-    transformations = Transformations(args.model)
+#     # Tworzenie instancji klasy Transformacje na podstawie podanych argumentów
+#     transformations = Transformations(args.model)
 
-    # Wywołanie odpowiednich funkcji na podstawie przekazanych argumentów
-    wynik = transformations.hirvonen(args.X, args.Y, args.Z, args.output)
+#     # Wywołanie odpowiednich funkcji na podstawie przekazanych argumentów
+#     wynik = transformations.hirvonen(args.X, args.Y, args.Z, args.output)
 
 
