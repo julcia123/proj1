@@ -241,8 +241,30 @@ class Transformations:
 #    FI, LAM, H = geo.hirvonen(X, Y, Z, output = 'dec_degree')
 # quit() #nwm co to dodało mi się to jak zaimportowałam biblioteke argparse
 
+<<<<<<< HEAD
 # if __name__ == "__main__":
 #     # Tworzenie parsera argumentów
+=======
+
+X = []
+Y = []
+Z = []
+
+data = open("gowno.txt", 'r')
+lines = data.read().splitlines()
+for el in lines:
+    for i in el:
+        x = el.split( )[0]
+        y = el.split( )[1]
+        z = el.split( )[2]
+    X.append(x)
+    Y.append(y)
+    Z.append(z)
+
+
+if __name__ == "__main__":
+    # Tworzenie parsera argumentów
+>>>>>>> 6b01b69adbd9f8a599b8e8bfb7dd21afbf5b45ea
     
 #     parser = argparse.ArgumentParser(description="Przykładowy program z użyciem argparse")
 #     parser.add_argument("--model", type=str, default="WGS84", choices=["WGS84", "GRS80", "Krasowski"],
