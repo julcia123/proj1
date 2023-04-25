@@ -13,9 +13,6 @@ import argparse
 
 class Transformations:
     def __init__(self, model):
-       # self.X = X
-        #self.Y = Y
-        #self.Z = Z
         """
         Parametry elipsoid:
         a - duża półos elipsoidy 
@@ -291,11 +288,15 @@ class Transformations:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Podaj plik")
     parser.add_argument("-pliczek", type = str, help = "Podaj nazwę pliku, w którym znajdują się dane wejsciowe (ps. oprócz nazwy podaj rozszerzenie:)")
-    parser.add_argument("-elip", type = str, help = "Wybierz elipsoidę, na której ma wykonać się transformacja, wpisz jedną: 'WGS84', 'GRS80', 'Elipsoida Krasowskiego' ")
+    parser.add_argument('-elip', type = str, help = "Wybierz elipsoidę, na której ma wykonać się transformacja, wpisz jedną: 'WGS84', 'GRS80', 'Elipsoida Krasowskiego' ")
     parser.add_argument("-trans", type = str, help = "Wybierz transformację jaką chcesz obliczyć: 'XYZ_BLH', 'BLH_XYZ', 'XYZ_NEU' ")
     args = parser.parse_args()
     elip = {'WGS84' : 'WGS84', 'GRS80' : 'GRS80', 'Elipsoida Krasowskiego' : 'Elipsoida Krasowskiego'}
     trans = {'XYZ_BLH' : 'hirvonen', 'BLH_XYZ' : 'filh2XYZ', 'XYZ_NEU' : 'xyz2neup'}
+    geo = Transformations(elip.get(args.elip)) #moze .upper()
+    dane = geo.pliczek(args.pliczek, trans[args.trans])
+    
+    
             
             
             
