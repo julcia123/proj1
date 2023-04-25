@@ -6,6 +6,7 @@ Created on Mon Apr 24 11:09:13 2023
 """
 from math import *
 import numpy as np
+import argparse
 
 class Transformations:
     def __init__(self, model: str = "WGS84"):
@@ -27,7 +28,7 @@ class Transformations:
             self.a = 6378245.000
             self.e2 = 0.00669342162296
         else:
-            raise AttributeError(f"Jesli napisałes małymi literami, spróbuj napisać wielkimi")
+            raise AttributeError("Jesli napisałes małymi literami, spróbuj napisać wielkimi")
     #Pomocnicze funkcje
         """
         Poniższe funkcje są funkcjami pomocniczymi dla obliczeń transformacji
@@ -272,11 +273,13 @@ class Transformations:
          
             
 if __name__ == "__main__":
-    # utworzenie obiektu
+    parser = argparse.ArgumentParser(description='Proszę wpisać tutaj współrzędne w zależnosci od tego, co chcesz policzyć: XYZ->BLH, lub BLH->XYZ; FL->układ 1992, lub FL->układ 2000)')
+    parser.add_argument('-a', '--argument', help = "Ten argument jest opcjonalny", required = False)
+    parser.add_argument('X', type = float, help = "Współrzędna X")
+    parser.add_argument('Y', type = float, help = "Współrzędna Y")
+    parser.add_argument('Z', type = float, help = "Współrzędna Z")
+    args = parser.parse_args()
     geo = Transformations(model = "WGS84")
-    # dane XYZ geocentryczne
-    X = 3664940.500; Y = 1409153.590; Z = 5009571.170
-    FI, LAM, H = geo.hirvonen(X, Y, Z, output='decimal_degree')
-    print(FI, LAM, H)
-
+    FI, LAM, H = geo.hirvonen(X, Y, Z, output = 'dec_degree')
+# quit() #nwm co to dodało mi się to jak zaimportowałam biblioteke argparse
 
