@@ -12,7 +12,7 @@ import argparse
 
 
 class Transformations:
-    def __init__(self, model: str = "WGS84"):
+    def __init__(self, model):
        # self.X = X
         #self.Y = Y
         #self.Z = Z
@@ -24,13 +24,13 @@ class Transformations:
             + GRS80:
             + Elipsoida Krasowskiego:
         """
-        if model == "WGS84":
+        if model == 'WGS84':
             self.a = 6378137.000
             self.e2 = 0.00669438002290
-        elif model == "GRS80":
+        elif model == 'GRS80':
             self.a = 6378137.000
-            self.e2 = 6356752.31414036
-        elif model == "Elipsoida Krasowskiego":
+            self.e2 = 0.00669438002290
+        elif model == 'Elipsoida Krasowskiego':
             self.a = 6378245.000
             self.e2 = 0.00669342162296
         else:
@@ -217,20 +217,91 @@ class Transformations:
     
     
     
-    def pliczek(self, plik, funkcja: type = "str"):
-        data = open(plik, 'r')
-        important = data.readlines()
-        lines = important.split("\n")
-        XYZ = []
-        for el in lines:
-            wsp = el.split( )
+    def pliczek(self, plik, funkcja: type = str):
+    
             
+        if funkcja == "XYZ_BLH":
+            X = []
+            Y = []
+            Z = []
+
+            data = open("plik", 'r')
+            lines = data.read().splitlines()
+            for el in lines:
+                for i in el:
+                    x = el.split( )[0]
+                    y = el.split( )[1]
+                    z = el.split( )[2]
+                X.append(x)
+                Y.append(y)
+                Z.append(z)
+            b, l, h = self.hirvonen(X, Y, Z)
+            np.savetxt(f"WYNIK_{funkcja}.txt", np.rad2deg(b), np.rad2deg(l), "%0.3f" %h,  delimiter = ";")
         
-        # if funkcja == "XYZ_BLH":
+        
+        elif funkcja == "BLH_XYZ":
+            fi = []
+            lam = []
+            h = []
+
+            data = open("plik", 'r')
+            lines = data.read().splitlines()
+            for el in lines:
+                for i in el:
+                    f = np.deg2rad(el.split( )[0])
+                    l = np.deg2rad(el.split( )[1])
+                    hi = el.split( )[2]
+                fi.append(f)
+                lam.append(l)
+                h.append(hi)
+            X, Y, Z = self.filh2XYZ(fi, lam, h)
+            np.savetxt(f"WYNIK_{funkcja}.txt", "%0.3f" %X, "%0.3f" %Y, "%0.3f" %Z,  delimiter = ";")
             
-         
+        elif funkcja == "XYZ_NEU":
+            X = []
+            Y = []
+            Z = []
+            X0 = []
+            Y0 = []
+            Z0 = []
+
+            data = open("plik", 'r')
+            lines = data.read().splitlines()
+            for el in lines:
+                for i in el:
+                    x = el[1:].split( )[0]
+                    y = el[1:].split( )[1]
+                    z = el[1:].split( )[2]
+                    x0 = el[0].split( )[0]
+                    y0 = el[0].split( )[1]
+                    z0 = el[0].split( )[2]
+                X.append(x)
+                Y.append(y)
+                Z.append(z)
+                X0.append(x0)
+                Y0.append(y0)
+                Z0.append(z0)
+                    
+            neu = self.xyz2neup(X, Y, Z, X0, Y0, Z0)
+            np.savetxt(f"WYNIK_{funkcja}.txt", neu)
+
+
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Podaj plik")
+    parser.add_argument("-pliczek", type = str, help = "Podaj nazwę pliku, w którym znajdują się dane wejsciowe (ps. oprócz nazwy podaj rozszerzenie:)")
+    parser.add_argument("-elip", type = str, help = "Wybierz elipsoidę, na której ma wykonać się transformacja, wpisz jedną: 'WGS84', 'GRS80', 'Elipsoida Krasowskiego' ")
+    parser.add_argument("-trans", type = str, help = "Wybierz transformację jaką chcesz obliczyć: 'XYZ_BLH', 'BLH_XYZ', 'XYZ_NEU' ")
+    args = parser.parse_args()
+    elip = {'WGS84' : 'WGS84', 'GRS80' : 'GRS80', 'Elipsoida Krasowskiego' : 'Elipsoida Krasowskiego'}
+    trans = {'XYZ_BLH' : 'hirvonen', 'BLH_XYZ' : 'filh2XYZ', 'XYZ_NEU' : 'xyz2neup'}
+            
+            
+            
             
 #if __name__ == "__main__":
+
 #    parser = argparse.ArgumentParser(description='Proszę wpisać tutaj współrzędne w zależnosci od tego, co chcesz policzyć: XYZ->BLH, lub BLH->XYZ; FL->układ 1992, lub FL->układ 2000)')
 #    parser.add_argument('-a', '--argument', help = "Ten argument jest opcjonalny", required = False)
 #    parser.add_argument('X', type = float, help = "Współrzędna X")
@@ -241,45 +312,5 @@ class Transformations:
 #    FI, LAM, H = geo.hirvonen(X, Y, Z, output = 'dec_degree')
 # quit() #nwm co to dodało mi się to jak zaimportowałam biblioteke argparse
 
-<<<<<<< HEAD
-# if __name__ == "__main__":
-#     # Tworzenie parsera argumentów
-=======
-
-X = []
-Y = []
-Z = []
-
-data = open("gowno.txt", 'r')
-lines = data.read().splitlines()
-for el in lines:
-    for i in el:
-        x = el.split( )[0]
-        y = el.split( )[1]
-        z = el.split( )[2]
-    X.append(x)
-    Y.append(y)
-    Z.append(z)
-
-
-if __name__ == "__main__":
-    # Tworzenie parsera argumentów
->>>>>>> 6b01b69adbd9f8a599b8e8bfb7dd21afbf5b45ea
-    
-#     parser = argparse.ArgumentParser(description="Przykładowy program z użyciem argparse")
-#     parser.add_argument("--model", type=str, default="WGS84", choices=["WGS84", "GRS80", "Krasowski"],
-#                         help="Model elipsoidy (domyślnie: WGS84)")
-#     parser.add_argument("--X", type=float, help="Wartość X")
-#     parser.add_argument("--Y", type=float, help="Wartość Y")
-#     parser.add_argument("--Z", type=float, help="Wartość Z")
-#     parser.add_argument("--output", type=str, default="dec_degree", choices=["dec_degree", "dms"],
-#                         help="Format wyników (domyślnie: dec_degree)")
-#     args = parser.parse_args()
-
-#     # Tworzenie instancji klasy Transformacje na podstawie podanych argumentów
-#     transformations = Transformations(args.model)
-
-#     # Wywołanie odpowiednich funkcji na podstawie przekazanych argumentów
-#     wynik = transformations.hirvonen(args.X, args.Y, args.Z, args.output)
 
 
