@@ -8,8 +8,32 @@ from math import *
 import numpy as np
 import argparse
 
+
+#plik = 'belble.txt'
+#p = open('belble.txt', "r")
+#dane = p.readlines()
+
+#for i in dane:
+#    if "X" in i:
+#        X = float(i[3:15])
+#print('X = ', X)
+
+#for i in dane:
+#    if "Y" in i:
+#        Y = float(i[20:32])
+#print('Y = ', Y)
+
+#for i in dane:
+#    if "Z" in i:
+#        Z = float(i[38:49])
+#print('Z = ', Z)
+
+
 class Transformations:
     def __init__(self, model: str = "WGS84"):
+       # self.X = X
+        #self.Y = Y
+        #self.Z = Z
         """
         Parametry elipsoid:
         a - duża półos elipsoidy 
