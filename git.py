@@ -60,7 +60,7 @@ class Transformations:
                 break
 
             lam = np.arctan2(Y, X)
-            return(fi, lam, h)
+            return(np.rad2deg(fi), np.rad2deg(lam), '%0.3f' %h)
 
 
 
@@ -77,7 +77,7 @@ class Transformations:
             Z = (N * (1 - self.e2) + h) * np.sin(fi)
             if abs(Xp - X) < (0.000001/206265):
                 break
-        return(X, Y, Z)
+        return('%0.3f' %X, '%0.3f' %Y, '%0.3f' %Z)
 
 
 
@@ -89,7 +89,7 @@ class Transformations:
         Rneu = np.array([[-np.sin(fi)*np.cos(lam), -np.sin(lam), np.cos(fi)*np.cos(lam)],
                          [-np.sin(fi)*np.sin(lam),  np.cos(lam), np.cos(fi)*np.sin(lam)],
                          [             np.cos(fi),            0,             np.sin(fi)]])
-        return Rneu
+        return(Rneu)
     
     
         """
@@ -116,7 +116,7 @@ class Transformations:
             X_rneu = R_neu.T@X_sr
             neu.append(X_rneu.T)
             
-        return neu
+        return(neu)
 
 
 
@@ -151,7 +151,7 @@ class Transformations:
         x92 = xgk*m - 5300000
         y92 = ygk*m + 500000
                 
-        return(x92, y92)
+        return('%0.3f' %x92, '%0.3f' %y92)
             
             
             
@@ -200,7 +200,7 @@ class Transformations:
         x00 = xgk * m
         y00 = ygk * m + strefa*1000000 + 500000
              
-        return(x00, y00)  
+        return('%0.3f' %x00, '%0.3f' %y00)  
     
     
     
@@ -294,8 +294,7 @@ if __name__ == "__main__":
     
     elip = {'WGS84':[6378137.000, 0.00669438002290], 'GRS80':[6378137.000, 0.00669438002290], 'Elipsoida Krasowskiego':[6378245.000, 0.00669342162296]}
     trans = {'XYZ_BLH' : 'hirvonen', 'BLH_XYZ' : 'filh2XYZ', 'XYZ_NEU' : 'xyz2neup'}
-    
-
+    print('SUPER')
             
             
             
