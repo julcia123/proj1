@@ -223,8 +223,8 @@ class Transformations:
                 Y.append(y)
                 Z.append(z)
             b, l, h = self.hirvonen(X, Y, Z)
-            np.savetxt(f"WYNIK_{funkcja}.txt", np.rad2deg(b), np.rad2deg(l), "%0.3f" %h,  delimiter = ";")
-        
+            with open("WYNIK_{funkcja}.txt", "w") as d:
+                d.write(b, l, h)
         
         elif funkcja == "BLH_XYZ":
             fi = []
@@ -242,7 +242,9 @@ class Transformations:
                 lam.append(l)
                 h.append(hi)
             X, Y, Z = self.filh2XYZ(fi, lam, h)
-            np.savetxt(f"WYNIK_{funkcja}.txt", "%0.3f" %X, "%0.3f" %Y, "%0.3f" %Z,  delimiter = ";")
+            with open("WYNIK_{funkcja}.txt", "w") as d:
+                d.write(X, Y, Z)
+                
             
         elif funkcja == "XYZ_NEU":
             X = []
@@ -269,7 +271,7 @@ class Transformations:
                 Y0.append(y0)
                 Z0.append(z0)
                     
-            neu = self.xyz2neup(X, Y, Z, X0, Y0, Z0)
+            neu = self.xyz2neup(X, Y, Z, X0, Y0, Z0, delimiter = ",")
             np.savetxt(f"WYNIK_{funkcja}.txt", neu)
 
 
@@ -277,7 +279,7 @@ class Transformations:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Podaj plik")
-    parser.add_argument("-pliczek", type = str, help = "Podaj nazwę pliku, w którym znajdują się dane wejsciowe (ps. oprócz nazwy podaj rozszerzenie:)")
+    parser.add_argument("-plik", type = str, help = "Podaj nazwę pliku, w którym znajdują się dane wejsciowe (ps. oprócz nazwy podaj rozszerzenie:)")
     parser.add_argument("-elip", type = str, help = "Wybierz elipsoidę, na której ma wykonać się transformacja, wpisz jedną: 'WGS84', 'GRS80', 'Elipsoida Krasowskiego' ")
     parser.add_argument("-trans", type = str, help = "Wybierz transformację jaką chcesz obliczyć: 'XYZ_BLH', 'BLH_XYZ', 'XYZ_NEU' ")
     args = parser.parse_args()
@@ -285,16 +287,19 @@ if __name__ == "__main__":
     if args.elip == None:
         args.elip = input(str('Wybierz elipsoide: '))
    
-    if args.pliczek == None:
-        args.pliczek = input(str('Podaj plik z rozszerzeniem: '))
+    if args.plik == None:
+        args.plik = input(str('Podaj plik z rozszerzeniem: '))
     
     if args.trans == None:
         args.trans = input(str('Wybierz transformacje: '))
                    
     
-    elip = {'WGS84':[6378137.000, 0.00669438002290], 'GRS80':[6378137.000, 0.00669438002290], 'Elipsoida Krasowskiego':[6378245.000, 0.00669342162296]}
-    trans = {'XYZ_BLH' : 'hirvonen', 'BLH_XYZ' : 'filh2XYZ', 'XYZ_NEU' : 'xyz2neup'}
-    print('SUPER')
+        elip = {'WGS84':[6378137.000, 0.00669438002290], 'GRS80':[6378137.000, 0.00669438002290], 'Elipsoida Krasowskiego':[6378245.000, 0.00669342162296]}
+        trans = {'XYZ_BLH' : 'hirvonen', 'BLH_XYZ' : 'filh2XYZ', 'XYZ_NEU' : 'xyz2neup'}
+        print('SUPER')
+        
+        geo = Transformations(elip[args.elip])
+        bleble = geo.pliczek(args.plik, trans[args.trans])
             
             
             
