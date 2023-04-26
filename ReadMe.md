@@ -19,7 +19,7 @@ Dostępne transformacje:
  
  Wymagania:
  ```sh
-   python 3.9
+   python 3.9 lub python 3.8.9
    biblioteka numpy
    biblioteka argparse
  ``` 
