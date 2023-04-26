@@ -7,6 +7,7 @@ Created on Mon Apr 24 11:09:13 2023
 from math import *
 import numpy as np
 import argparse
+import os
 
 
 
@@ -226,6 +227,7 @@ class Transformations:
             Y = data[:,1]
             Z = data[:,2]
             blh = self.hirvonen(X, Y, Z)
+            plik_wynikowy = os.path.join(os.getcwd(), "PROJEKT 1", f"WYNIK_{funkcja}.txt")
             np.savetxt("WYNIK_{funkcja}", blh, delimiter = ";")
         
         elif funkcja == "BLH_XYZ":
@@ -271,15 +273,7 @@ if __name__ == "__main__":
     parser.add_argument("-elip", type = str, help = "Wybierz elipsoidę, na której ma wykonać się transformacja, wpisz jedną: 'WGS84', 'GRS80', 'Elipsoida Krasowskiego' ")
     parser.add_argument("-trans", type = str, help = "Wybierz transformację jaką chcesz obliczyć: 'XYZ_BLH', 'BLH_XYZ', 'XYZ_NEU' ")
     args = parser.parse_args()
-    
-    # if args.elip == None:
-    #     args.elip = input(str('Wybierz elipsoide: '))
-   
-    # if args.plik == None:
-    #     args.plik = input(str('Podaj plik z rozszerzeniem: '))
-    
-    # if args.trans == None:
-    #     args.trans = input(str('Wybierz transformacje: '))
+
                    
     
     elip = {'WGS84':[6378137.000, 0.00669438002290], 'GRS80':[6378137.000, 0.00669438002290], 'Elipsoida Krasowskiego':[6378245.000, 0.00669342162296]}
