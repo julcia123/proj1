@@ -289,7 +289,6 @@ if __name__ == "__main__":
     bleble = geo.pliczek(args.plik, trans[args.trans.upper()])
     print("Zapisano")
         
-quit()
             
 
 
