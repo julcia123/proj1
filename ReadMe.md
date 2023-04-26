@@ -49,6 +49,11 @@ Dostępne transformacje:
    'BL_PL2000'
   ```
   
+  Po wyborze parametrów i załadowaniu pliku z danymi utworzy się plik tekstowy zawierający wyniki wykonanych obliczeń, a na konsoli pojawi się komunikat:
+  ```sh
+   Zapisano
+  ```
+  
   
    
  
