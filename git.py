@@ -60,7 +60,9 @@ class Transformations:
                 break
 
             lam = np.arctan2(Y, X)
-            return(np.rad2deg(fi), np.rad2deg(lam), '%0.3f' %h)
+            flh = []
+            flh.append(fi, lam, h)
+            return(flh)
 
 
 
@@ -77,7 +79,10 @@ class Transformations:
             Z = (N * (1 - self.e2) + h) * np.sin(fi)
             if abs(Xp - X) < (0.000001/206265):
                 break
-        return('%0.3f' %X, '%0.3f' %Y, '%0.3f' %Z)
+            
+        XYZ = []
+        XYZ.append(X, Y, Z)
+        return(XYZ)
 
 
 
@@ -150,7 +155,9 @@ class Transformations:
                 
         x92 = xgk*m - 5300000
         y92 = ygk*m + 500000
-                
+        
+        xy92 = []
+        xy92.append(x92, y92)        
         return('%0.3f' %x92, '%0.3f' %y92)
             
             
@@ -199,7 +206,9 @@ class Transformations:
              
         x00 = xgk * m
         y00 = ygk * m + strefa*1000000 + 500000
-             
+        
+        xy00 = []
+        xy00.append(x00, y00)
         return('%0.3f' %x00, '%0.3f' %y00)  
     
     
@@ -222,9 +231,9 @@ class Transformations:
                 X.append(x)
                 Y.append(y)
                 Z.append(z)
-            b, l, h = self.hirvonen(X, Y, Z)
+            blh = self.hirvonen(X, Y, Z)
             with open("WYNIK_{funkcja}.txt", "w") as d:
-                d.write(b, l, h)
+                d.write(blh)
         
         elif funkcja == "BLH_XYZ":
             fi = []
@@ -241,9 +250,9 @@ class Transformations:
                 fi.append(f)
                 lam.append(l)
                 h.append(hi)
-            X, Y, Z = self.filh2XYZ(fi, lam, h)
+            XYZ = self.filh2XYZ(fi, lam, h)
             with open("WYNIK_{funkcja}.txt", "w") as d:
-                d.write(X, Y, Z)
+                d.write(XYZ)
                 
             
         elif funkcja == "XYZ_NEU":
