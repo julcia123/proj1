@@ -2,12 +2,13 @@ PROJEKT NR 1: TRANSFORMACJE
 
 
 Dostępne transformacje:
-  > XYZ ---> BLH
+```sh
+  > XYZ ---> BLH\\
   > BLH ---> XYZ
   > XYZ ---> NEU
   > BL ---> PL1992
   > BL ---> PL2000
-  
+```  
  
  Dostępne elipsoidy:
   > GRS80
