@@ -49,6 +49,7 @@ class Transformations:
             Następujący algorytm przelicza współrzędne z układu ortokartezjańskiego na współrzędne geodezyjne.
         """
     def hirvonen(self, X, Y, Z):
+        flh = []
         p = np.sqrt(X**2 + Y**2)
         fi = np.arctan(Z / (p * (1 - self.e2)))
         while True:
@@ -60,7 +61,6 @@ class Transformations:
                 break
 
             lam = np.arctan2(Y, X)
-            flh = []
             flh.append(fi, lam, h)
             return(flh)
 
@@ -71,6 +71,7 @@ class Transformations:
             Algorytm przelicza współrzędne geodezyjne (BLH) na współrzędne w układzie ortokartezjańskim (XYZ)
         """
     def filh2XYZ(self, fi, lam, h):
+        XYZ = []
         while True:
             N = self.Npu(fi)
             X = (N + h) * np.cos(fi) * np.cos(lam)
@@ -80,7 +81,7 @@ class Transformations:
             if abs(Xp - X) < (0.000001/206265):
                 break
             
-        XYZ = []
+        
         XYZ.append(X, Y, Z)
         return(XYZ)
 
@@ -155,10 +156,12 @@ class Transformations:
                 
         x92 = xgk*m - 5300000
         y92 = ygk*m + 500000
+        x92 = '%0.3f' %x92
+        y92 = '%0.3f' %y92
         
         xy92 = []
         xy92.append(x92, y92)        
-        return('%0.3f' %x92, '%0.3f' %y92)
+        return(xy92)
             
             
             
@@ -206,81 +209,58 @@ class Transformations:
              
         x00 = xgk * m
         y00 = ygk * m + strefa*1000000 + 500000
+        x00 = '%0.3f' %x00
+        y00 = '%0.3f' %y00
         
         xy00 = []
+        
         xy00.append(x00, y00)
-        return('%0.3f' %x00, '%0.3f' %y00)  
+        return(xy00)  
     
     
     
     def pliczek(self, plik, funkcja: type = str):
-    
-            
+        data = np.genfromtxt(plik,  delimiter = " ")
         if funkcja == "XYZ_BLH":
-            X = []
-            Y = []
-            Z = []
-
-            data = open("plik", 'r')
-            lines = data.read().splitlines()
-            for el in lines:
-                for i in el:
-                    x = el.split( )[0]
-                    y = el.split( )[1]
-                    z = el.split( )[2]
-                X.append(x)
-                Y.append(y)
-                Z.append(z)
+            X = data[:,0]
+            Y = data[:,1]
+            Z = data[:,2]
             blh = self.hirvonen(X, Y, Z)
             np.savetxt("WYNIK_{funkcja}", blh, delimiter = ";")
         
         elif funkcja == "BLH_XYZ":
-            fi = []
-            lam = []
-            h = []
-
-            data = open("plik", 'r')
-            lines = data.read().splitlines()
-            for el in lines:
-                for i in el:
-                    f = np.deg2rad(el.split( )[0])
-                    l = np.deg2rad(el.split( )[1])
-                    hi = el.split( )[2]
-                fi.append(f)
-                lam.append(l)
-                h.append(hi)
+            fi = np.deg2rad(data[:,0])
+            lam = np.deg2rad(data[:,1])
+            h = data[:,2]
             XYZ = self.filh2XYZ(fi, lam, h)
-            with open("WYNIK_{funkcja}.txt", "w") as d:
-                d.write(XYZ)
+            np.savetxt("WYNIK_{funkcja}", XYZ)
                 
             
         elif funkcja == "XYZ_NEU":
-            X = []
-            Y = []
-            Z = []
-            X0 = []
-            Y0 = []
-            Z0 = []
-
-            data = open("plik", 'r')
-            lines = data.read().splitlines()
-            for el in lines:
-                for i in el:
-                    x = el[1:].split( )[0]
-                    y = el[1:].split( )[1]
-                    z = el[1:].split( )[2]
-                    x0 = el[0].split( )[0]
-                    y0 = el[0].split( )[1]
-                    z0 = el[0].split( )[2]
-                X.append(x)
-                Y.append(y)
-                Z.append(z)
-                X0.append(x0)
-                Y0.append(y0)
-                Z0.append(z0)
+            X0 = data[0,0]
+            Y0 = data[0,1]
+            Z0 = data[0,2]
+            X = data[1,0]
+            Y = data[1,1]
+            Z = data[1,2]
                     
-            neu = self.xyz2neup(X, Y, Z, X0, Y0, Z0, delimiter = ",")
-            np.savetxt(f"WYNIK_{funkcja}.txt", neu)
+            neu = self.xyz2neup(X, Y, Z, X0, Y0, Z0)
+            np.savetxt(f"WYNIK_{funkcja}.txt", neu, delimiter = ";")
+        
+        
+        elif funkcja == "BL_PL1992":
+            fi = np.deg2rad(data[:,0])
+            lam = np.deg2rad(data[:,1])
+            wsp92 = self.cale92(fi, lam)
+            np.savetxt(f"WYNIK_{funkcja}.txt", wsp92, delimiter = ";")
+        
+        
+        elif funkcja == "BL_PL2000":
+            fi = np.deg2rad(data[:,0])
+            lam = np.deg2rad(data[:,1])
+            wsp00 = self.cale00(fi, lam)
+            np.savetxt(f"WYNIK_{funkcja}.txt", wsp00, delimiter = ";")
+        
 
 
 
