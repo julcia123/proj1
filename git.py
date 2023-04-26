@@ -232,8 +232,7 @@ class Transformations:
                 Y.append(y)
                 Z.append(z)
             blh = self.hirvonen(X, Y, Z)
-            with open("WYNIK_{funkcja}.txt", "w") as d:
-                d.write(blh)
+            np.savetxt("WYNIK_{funkcja}", blh, delimiter = ";")
         
         elif funkcja == "BLH_XYZ":
             fi = []
@@ -293,36 +292,26 @@ if __name__ == "__main__":
     parser.add_argument("-trans", type = str, help = "Wybierz transformację jaką chcesz obliczyć: 'XYZ_BLH', 'BLH_XYZ', 'XYZ_NEU' ")
     args = parser.parse_args()
     
-    if args.elip == None:
-        args.elip = input(str('Wybierz elipsoide: '))
+    # if args.elip == None:
+    #     args.elip = input(str('Wybierz elipsoide: '))
    
-    if args.plik == None:
-        args.plik = input(str('Podaj plik z rozszerzeniem: '))
+    # if args.plik == None:
+    #     args.plik = input(str('Podaj plik z rozszerzeniem: '))
     
-    if args.trans == None:
-        args.trans = input(str('Wybierz transformacje: '))
+    # if args.trans == None:
+    #     args.trans = input(str('Wybierz transformacje: '))
                    
     
-        elip = {'WGS84':[6378137.000, 0.00669438002290], 'GRS80':[6378137.000, 0.00669438002290], 'Elipsoida Krasowskiego':[6378245.000, 0.00669342162296]}
-        trans = {'XYZ_BLH' : 'hirvonen', 'BLH_XYZ' : 'filh2XYZ', 'XYZ_NEU' : 'xyz2neup'}
-        print('SUPER')
+    elip = {'WGS84':[6378137.000, 0.00669438002290], 'GRS80':[6378137.000, 0.00669438002290], 'Elipsoida Krasowskiego':[6378245.000, 0.00669342162296]}
+    trans = {'XYZ_BLH' : 'hirvonen', 'BLH_XYZ' : 'filh2XYZ', 'XYZ_NEU' : 'xyz2neup'}
         
-        geo = Transformations(elip[args.elip])
-        bleble = geo.pliczek(args.plik, trans[args.trans])
+    geo = Transformations(elip[args.elip.upper()])
+    bleble = geo.pliczek(args.plik, trans[args.trans.upper()])
+    print("Zapisano")
+        
+quit()
             
-            
-            
-#if __name__ == "__main__":
 
-#    parser = argparse.ArgumentParser(description='Proszę wpisać tutaj współrzędne w zależnosci od tego, co chcesz policzyć: XYZ->BLH, lub BLH->XYZ; FL->układ 1992, lub FL->układ 2000)')
-#    parser.add_argument('-a', '--argument', help = "Ten argument jest opcjonalny", required = False)
-#    parser.add_argument('X', type = float, help = "Współrzędna X")
-#    parser.add_argument('Y', type = float, help = "Współrzędna Y")
-#    parser.add_argument('Z', type = float, help = "Współrzędna Z")
-#    args = parser.parse_args()
-#    geo = Transformations(model = "WGS84")
-#    FI, LAM, H = geo.hirvonen(X, Y, Z, output = 'dec_degree')
-# quit() #nwm co to dodało mi się to jak zaimportowałam biblioteke argparse
 
 
 
