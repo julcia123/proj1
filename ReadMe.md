@@ -26,5 +26,29 @@ Dostępne transformacje:
   
  Opis programu:
  
- 
+ Plik przyjmuje argumenty podane za pomocą następujących flag:
+ ```sh
+   -pliczek przyjmuje plik (koniecznie z rozszerzeniem), w którym znajdują się dane potrzebne do wykonania transformacji
+   -elip przyjmuje nazwę modelu elipsoidy, na której chcemy dokonać transformacji
+   -trans przyjmuje nazwę transformacji, którą chcemy wykonać
+  ```
+  
+  Wybór elipsoidy możliwy jest poprzez wpisanie jednej z poniższych nazw:
+  ```sh
+   'WGS84'
+   'GRS80'
+   'Elipsoida Krasowskiego'
+  ```
+  
+  Wybór transformacji możliwy jest poprzez wpisanie jednej z poniższych nazw:
+  ```sh
+   'XYZ_BLH'
+   'BLH_XYZ'
+   'XYZ_NEU'
+   'BL_PL1992'
+   'BL_PL2000'
+  ```
+  
+  
+   
  
