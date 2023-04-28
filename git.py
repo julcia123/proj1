@@ -215,7 +215,7 @@ class Transformations:
             Z = data[:,2]
                 # to zmienic e starej wersji, bedzie latwiej
             blh = self.hirvonen(X, Y, Z)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", blh, delimiter=";", fmt='%0.10f %0.10f %0.3f')
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", blh, delimiter=";")
                 #with open(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", 'w') as file:
                  #   file.write('\n'.join([';'.join([str(cell) for cell in row]) for row in blh]))
 
@@ -263,7 +263,7 @@ if __name__ == "__main__":
                    
     
     elip = {'WGS84':[6378137.000, 0.00669438002290], 'GRS80':[6378137.000, 0.00669438002290], 'Elipsoida Krasowskiego':[6378245.000, 0.00669342162296]}
-iujes    funkcja = {'XYZ_BLH' : 'hirvonen', 'BLH_XYZ' : 'filh2XYZ', 'XYZ_NEU' : 'xyz2neup', 'BL_PL1992' : 'cale92', 'BL_PL2000' : 'cale00'}
+    funkcja = {'XYZ_BLH' : 'hirvonen', 'BLH_XYZ' : 'filh2XYZ', 'XYZ_NEU' : 'xyz2neup', 'BL_PL1992' : 'cale92', 'BL_PL2000' : 'cale00'}
         
     geo = Transformations(elip[args.elip.upper()])
     # bleble = geo.pliczek(args.plik, funkcja[args.funkcja.upper()])
