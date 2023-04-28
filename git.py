@@ -49,18 +49,17 @@ class Transformations:
         """
             Następujący algorytm przelicza współrzędne z układu ortokartezjańskiego na współrzędne geodezyjne.
         """
-    for e in data:
-        def hirvonen(self, X, Y, Z):
-            flh = []
-            p = np.sqrt(X**2 + Y**2)
-            fi = np.arctan(Z / (p * (1 - self.e2)))
-            while True:
-                N = self.Npu(fi)
-                h = p / np.cos(fi) - N
-                fip = fi     #fip - fi poprzednie, fi - fi nowe
-                fi = np.arctan(Z / (p * (1 - N * self.e2 / (N + h))))
-                if abs(fip - fi) < (0.000001/206265):
-                    break
+    def hirvonen(self, X, Y, Z):
+        flh = []
+        p = np.sqrt(X**2 + Y**2)
+        fi = np.arctan(Z / (p * (1 - self.e2)))
+        while True:
+            N = self.Npu(fi)
+            h = p / np.cos(fi) - N
+            fip = fi     #fip - fi poprzednie, fi - fi nowe
+            fi = np.arctan(Z / (p * (1 - N * self.e2 / (N + h))))
+            if abs(fip - fi) < (0.000001/206265):
+                break
     
                 lam = np.arctan2(Y, X)
                 flh.extend([fi, lam, h])
@@ -72,17 +71,16 @@ class Transformations:
         """
             Algorytm przelicza współrzędne geodezyjne (BLH) na współrzędne w układzie ortokartezjańskim (XYZ)
         """
-    for e in data:
-        def filh2XYZ(self, fi, lam, h):
-            XYZ = []
-            while True:
-                N = self.Npu(fi)
-                X = (N + h) * np.cos(fi) * np.cos(lam)
-                Xp = X
-                Y = (N + h) * np.cos(fi) * np.sin(lam)
-                Z = (N * (1 - self.e2) + h) * np.sin(fi)
-                if abs(Xp - X) < (0.000001/206265):
-                    break
+    def filh2XYZ(self, fi, lam, h):
+        XYZ = []
+        while True:
+            N = self.Npu(fi)
+            X = (N + h) * np.cos(fi) * np.cos(lam)
+            Xp = X
+            Y = (N + h) * np.cos(fi) * np.sin(lam)
+            Z = (N * (1 - self.e2) + h) * np.sin(fi)
+            if abs(Xp - X) < (0.000001/206265):
+                break
                 
             
             XYZ.append(X, Y, Z)
@@ -133,39 +131,38 @@ class Transformations:
         """
             Algorytm przelicza współrzędne geodezyjne (BL) na współrzędne w układzie 1992 (XY)
         """
-    for e in data:
-        def cale92(self, fi, lam):
-            lam0 = (19*np.pi)/180
+    def cale92(self, fi, lam):
+        lam0 = (19*np.pi)/180
                     
-            m = 0.9993
+        m = 0.9993
                     
-            b2 = (self.a**2) * (1-self.e2)   #krotsza polos
+        b2 = (self.a**2) * (1-self.e2)   #krotsza polos
                     
-            e2p = (self.a**2 - b2 ) / b2   #drugi mimosrod elipsy
+        e2p = (self.a**2 - b2 ) / b2   #drugi mimosrod elipsy
                     
-            dlam = lam - lam0
+        dlam = lam - lam0
                     
-            t = np.tan(fi)
+        t = np.tan(fi)
                     
-            ni = np.sqrt(e2p * (np.cos(fi))**2)
+        ni = np.sqrt(e2p * (np.cos(fi))**2)
+        
+        N = self.Npu(fi)
                     
-            N = self.Npu(fi)
-                    
-            sigma = self.Sigma(fi)
+        sigma = self.Sigma(fi)
     
                     
                     
-            xgk = sigma + ((dlam**2)/2)*N*np.sin(fi)*np.cos(fi) * ( 1+ ((dlam**2)/12)*(np.cos(fi))**2 * ( 5 - (t**2)+9*(ni**2) + 4*(ni**4)     )  + ((dlam**4)/360)*(np.cos(fi)**4) * (61-58*(t**2)+(t**4) + 270*(ni**2) - 330*(ni**2)*(t**2))  )
-            ygk = (dlam*N* np.cos(fi)) * (1+(((dlam)**2/6)*(np.cos(fi))**2) *(1-(t**2)+(ni**2))+((dlam**4)/120)*(np.cos(fi)**4)*(5-18*(t**2)+(t**4)+14*(ni**2)-58*(ni**2)*(t**2)) )
+        xgk = sigma + ((dlam**2)/2)*N*np.sin(fi)*np.cos(fi) * ( 1+ ((dlam**2)/12)*(np.cos(fi))**2 * ( 5 - (t**2)+9*(ni**2) + 4*(ni**4)     )  + ((dlam**4)/360)*(np.cos(fi)**4) * (61-58*(t**2)+(t**4) + 270*(ni**2) - 330*(ni**2)*(t**2))  )
+        ygk = (dlam*N* np.cos(fi)) * (1+(((dlam)**2/6)*(np.cos(fi))**2) *(1-(t**2)+(ni**2))+((dlam**4)/120)*(np.cos(fi)**4)*(5-18*(t**2)+(t**4)+14*(ni**2)-58*(ni**2)*(t**2)) )
                     
-            x92 = xgk*m - 5300000
-            y92 = ygk*m + 500000
-            x92 = '%0.3f' %x92
-            y92 = '%0.3f' %y92
+        x92 = xgk*m - 5300000
+        y92 = ygk*m + 500000
+        x92 = '%0.3f' %x92
+        y92 = '%0.3f' %y92
             
-            xy92 = []
-            xy92.append(x92, y92)        
-            return(xy92)
+        xy92 = []
+        xy92.append(x92, y92)        
+        return(xy92)
             
             
             
@@ -173,76 +170,78 @@ class Transformations:
         """
             Następujący algorytm umożliwia przeliczenie współrzędnych geodezyjnych (BLH) na współrzędne w układzie 2000 (XY)
         """
-    for e in data:
-        def cale00(self, fi, lam):
-            m=0.999923
-            lam0=0 
-            strefa = 0
-            if lam >np.deg2rad(13.5) and lam < np.deg2rad(16.5):
-                strefa = 5
-                lam0 = np.deg2rad(15)
-            elif lam >np.deg2rad(16.5) and lam < np.deg2rad(19.5):
-                strefa = 6
-                lam0 = np.deg2rad(18)
-            elif lam >np.deg2rad(19.5) and lam < np.deg2rad(22.5):
-                strefa =7
-                lam0 = np.deg2rad(21)
-            elif lam >np.deg2rad(22.5) and lam < np.deg2rad(25.5):
-                strefa = 8
-                lam0 = np.deg2rad(24)
-            else:
-                print("Punkt poza strefami odwzorowawczymi układu PL-2000")        
+
+    def cale00(self, fi, lam):
+        m=0.999923
+        lam0=0 
+        strefa = 0
+        if lam >np.deg2rad(13.5) and lam < np.deg2rad(16.5):
+            strefa = 5
+            lam0 = np.deg2rad(15)
+        elif lam >np.deg2rad(16.5) and lam < np.deg2rad(19.5):
+            strefa = 6
+            lam0 = np.deg2rad(18)
+        elif lam >np.deg2rad(19.5) and lam < np.deg2rad(22.5):
+            strefa =7
+            lam0 = np.deg2rad(21)
+        elif lam >np.deg2rad(22.5) and lam < np.deg2rad(25.5):
+            strefa = 8
+            lam0 = np.deg2rad(24)
+        else:
+            print("Punkt poza strefami odwzorowawczymi układu PL-2000")        
                  
-            b2 = (self.a**2) * (1-self.e2)   #krotsza polos
+        b2 = (self.a**2) * (1-self.e2)   #krotsza polos
                  
-            e2p = ( self.a**2 - b2 ) / b2   #drugi mimosrod elipsy
+        e2p = ( self.a**2 - b2 ) / b2   #drugi mimosrod elipsy
                  
-            dlam = lam - lam0
+        dlam = lam - lam0
                  
-            t = np.tan(fi)
+        t = np.tan(fi)
                  
-            ni = np.sqrt(e2p * (np.cos(fi))**2)
+        ni = np.sqrt(e2p * (np.cos(fi))**2)
                  
-            N = self.Npu(fi)
+        N = self.Npu(fi)
                  
-            sigma = self.Sigma(fi)
+        sigma = self.Sigma(fi)
     
                  
                  
-            xgk = sigma + ((dlam**2)/2)*N*np.sin(fi)*np.cos(fi) * ( 1+ ((dlam**2)/12)*(np.cos(fi))**2 * ( 5 - (t**2)+9*(ni**2) + 4*(ni**4)     )  + ((dlam**4)/360)*(np.cos(fi)**4) * (61-58*(t**2)+(t**4) + 270*(ni**2) - 330*(ni**2)*(t**2))  )
-            ygk = (dlam*N* np.cos(fi)) * (1+(((dlam)**2/6)*(np.cos(fi))**2) *(1-(t**2)+(ni**2))+((dlam**4)/120)*(np.cos(fi)**4)*(5-18*(t**2)+(t**4)+14*(ni**2)-58*(ni**2)*(t**2)) )
+        xgk = sigma + ((dlam**2)/2)*N*np.sin(fi)*np.cos(fi) * ( 1+ ((dlam**2)/12)*(np.cos(fi))**2 * ( 5 - (t**2)+9*(ni**2) + 4*(ni**4)     )  + ((dlam**4)/360)*(np.cos(fi)**4) * (61-58*(t**2)+(t**4) + 270*(ni**2) - 330*(ni**2)*(t**2))  )
+        ygk = (dlam*N* np.cos(fi)) * (1+(((dlam)**2/6)*(np.cos(fi))**2) *(1-(t**2)+(ni**2))+((dlam**4)/120)*(np.cos(fi)**4)*(5-18*(t**2)+(t**4)+14*(ni**2)-58*(ni**2)*(t**2)) )
                  
-            x00 = xgk * m
-            y00 = ygk * m + strefa*1000000 + 500000
-            x00 = '%0.3f' %x00
-            y00 = '%0.3f' %y00
+        x00 = xgk * m
+        y00 = ygk * m + strefa*1000000 + 500000
+        x00 = '%0.3f' %x00
+        y00 = '%0.3f' %y00
             
-            xy00 = []
-            
-            xy00.append(x00, y00)
-            return(xy00)  
+        xy00 = []
+        
+        xy00.append(x00, y00)
+        return(xy00)  
     
     
     
     def pliczek(self, plik, funkcja):
         data = np.genfromtxt(plik,  delimiter = " ")
         if funkcja == "XYZ_BLH":
-            X = data[e,0]
-            Y = data[e,1]
-            Z = data[e,2]
-            # to zmienic ze starej wersji, bedzie latwiej
-            blh = self.hirvonen(X, Y, Z)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", blh, delimiter=";")
-            #with open(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", 'w') as file:
-             #   file.write('\n'.join([';'.join([str(cell) for cell in row]) for row in blh]))
+            for e in data:
+                X = data[e,0]
+                Y = data[e,1]
+                Z = data[e,2]
+                # to zmienic ze starej wersji, bedzie latwiej
+                blh = self.hirvonen(X, Y, Z)
+                np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", blh, delimiter=";")
+                #with open(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", 'w') as file:
+                 #   file.write('\n'.join([';'.join([str(cell) for cell in row]) for row in blh]))
 
         elif funkcja == "BLH_XYZ":
-            fi = np.deg2rad(float(data[:,0]))
-            lam = np.deg2rad(float(data[:,1]))
-            h = data[:,2]
-            XYZ = self.filh2XYZ(fi, lam, h)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", XYZ, delimiter=";")
-                
+            for e in data:
+                fi = np.deg2rad(float(data[e,0]))
+                lam = np.deg2rad(float(data[e,1]))
+                h = data[e,2]
+                XYZ = self.filh2XYZ(fi, lam, h)
+                np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", XYZ, delimiter=";")
+                    
             
         elif funkcja == "XYZ_NEU":
             X0 = data[0,0]
@@ -256,16 +255,18 @@ class Transformations:
             np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", neu, delimiter=";")
         
         elif funkcja == "BL_PL1992":
-            fi = np.deg2rad(data[e,0])
-            lam = np.deg2rad(data[e,1])
-            wsp92 = self.cale92(fi, lam)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp92, delimiter=";")
-        
+            for e in data:
+                fi = np.deg2rad(data[e,0])
+                lam = np.deg2rad(data[e,1])
+                wsp92 = self.cale92(fi, lam)
+                np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp92, delimiter=";")
+            
         elif funkcja == "BL_PL2000":
-            fi = np.deg2rad(data[e,0])
-            lam = np.deg2rad(data[e,1])
-            wsp00 = self.cale00(fi, lam)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp00, delimiter=";")
+            for e in data:
+                fi = np.deg2rad(data[e,0])
+                lam = np.deg2rad(data[e,1])
+                wsp00 = self.cale00(fi, lam)
+                np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp00, delimiter=";")
 
 
 
