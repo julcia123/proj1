@@ -62,7 +62,7 @@ class Transformations:
                 break
 
             lam = np.arctan2(Y, X)
-            flh.append(fi, lam, h)
+            flh.extend([fi, lam, h])
             return(flh)
 
 
@@ -220,22 +220,24 @@ class Transformations:
     
     
     
-    def pliczek(self, plik, funkcja: type = str):
+    def pliczek(self, plik, funkcja):
         data = np.genfromtxt(plik,  delimiter = " ")
         if funkcja == "XYZ_BLH":
-            X = data[:,0]
-            Y = data[:,1]
-            Z = data[:,2]
+            X = data[0,0]
+            Y = data[0,1]
+            Z = data[0,2]
+            # to zmienic ze starej wersji, bedzie latwiej
             blh = self.hirvonen(X, Y, Z)
-            plik_wynikowy = os.path.join(os.getcwd(), "PROJEKT 1", f"WYNIK_{funkcja}.txt")
-            np.savetxt("WYNIK_{funkcja}", blh, delimiter = ";")
-        
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", blh, delimiter=";")
+            #with open(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", 'w') as file:
+             #   file.write('\n'.join([';'.join([str(cell) for cell in row]) for row in blh]))
+
         elif funkcja == "BLH_XYZ":
-            fi = np.deg2rad(data[:,0])
-            lam = np.deg2rad(data[:,1])
+            fi = np.deg2rad(float(data[:,0]))
+            lam = np.deg2rad(float(data[:,1]))
             h = data[:,2]
             XYZ = self.filh2XYZ(fi, lam, h)
-            np.savetxt("WYNIK_{funkcja}", XYZ)
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", XYZ, delimiter=";")
                 
             
         elif funkcja == "XYZ_NEU":
@@ -247,22 +249,19 @@ class Transformations:
             Z = data[1,2]
                     
             neu = self.xyz2neup(X, Y, Z, X0, Y0, Z0)
-            np.savetxt(f"WYNIK_{funkcja}.txt", neu, delimiter = ";")
-        
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", neu, delimiter=";")
         
         elif funkcja == "BL_PL1992":
             fi = np.deg2rad(data[:,0])
             lam = np.deg2rad(data[:,1])
             wsp92 = self.cale92(fi, lam)
-            np.savetxt(f"WYNIK_{funkcja}.txt", wsp92, delimiter = ";")
-        
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp92, delimiter=";")
         
         elif funkcja == "BL_PL2000":
             fi = np.deg2rad(data[:,0])
             lam = np.deg2rad(data[:,1])
             wsp00 = self.cale00(fi, lam)
-            np.savetxt(f"WYNIK_{funkcja}.txt", wsp00, delimiter = ";")
-        
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp00, delimiter=";")
 
 
 
@@ -271,16 +270,17 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Podaj plik")
     parser.add_argument("-plik", type = str, help = "Podaj nazwę pliku, w którym znajdują się dane wejsciowe (ps. oprócz nazwy podaj rozszerzenie:)")
     parser.add_argument("-elip", type = str, help = "Wybierz elipsoidę, na której ma wykonać się transformacja, wpisz jedną: 'WGS84', 'GRS80', 'Elipsoida Krasowskiego' ")
-    parser.add_argument("-trans", type = str, help = "Wybierz transformację jaką chcesz obliczyć: 'XYZ_BLH', 'BLH_XYZ', 'XYZ_NEU' ")
+    parser.add_argument("-funkcja", type = str, help = "Wybierz transformację jaką chcesz obliczyć: 'XYZ_BLH', 'BLH_XYZ', 'XYZ_NEU' ")
     args = parser.parse_args()
 
                    
     
     elip = {'WGS84':[6378137.000, 0.00669438002290], 'GRS80':[6378137.000, 0.00669438002290], 'Elipsoida Krasowskiego':[6378245.000, 0.00669342162296]}
-    trans = {'XYZ_BLH' : 'hirvonen', 'BLH_XYZ' : 'filh2XYZ', 'XYZ_NEU' : 'xyz2neup'}
+    funkcja = {'XYZ_BLH' : 'hirvonen', 'BLH_XYZ' : 'filh2XYZ', 'XYZ_NEU' : 'xyz2neup'}
         
     geo = Transformations(elip[args.elip.upper()])
-    bleble = geo.pliczek(args.plik, trans[args.trans.upper()])
+    # bleble = geo.pliczek(args.plik, funkcja[args.funkcja.upper()])
+    bleble = geo.pliczek(args.plik, args.funkcja.upper())
     print("Zapisano")
         
             
