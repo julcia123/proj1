@@ -216,16 +216,13 @@ class Transformations:
                 # to zmienic e starej wersji, bedzie latwiej
             blh = self.hirvonen(X, Y, Z)
             np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", blh, delimiter=";")
-                #with open(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", 'w') as file:
-                 #   file.write('\n'.join([';'.join([str(cell) for cell in row]) for row in blh]))
 
         elif funkcja == "BLH_XYZ":
             fi = np.deg2rad((data[:,0]))
             lam = np.deg2rad((data[:,1]))
             h = data[:,2]
             XYZ = self.filh2XYZ(fi, lam, h)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", XYZ, delimiter=";", fmt ='%0.3f %0.3f %0.3f')
-                    
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", XYZ, delimiter=";")
             
         elif funkcja == "XYZ_NEU":
             X0 = data[0,0]
@@ -234,22 +231,20 @@ class Transformations:
             X = data[1,0]
             Y = data[1,1]
             Z = data[1,2]
-                    
             neu = self.xyz2neup(X, Y, Z, X0, Y0, Z0)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", neu, delimiter=";", fmt ='%0.3f %0.3f %0.3f')
-        
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", neu, delimiter=";")
+            
         elif funkcja == "BL_PL1992":
             fi = np.deg2rad(data[:,0])
             lam = np.deg2rad(data[:,1])
             wsp92 = self.cale92(fi, lam)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp92, delimiter=";", fmt='%0.3f %0.3f')
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp92, delimiter=";")
             
         elif funkcja == "BL_PL2000":
             fi = np.deg2rad(data[:,0])
             lam = np.deg2rad(data[:,1])
             wsp00 = self.cale00(fi, lam)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp00, delimiter=";", fmt='%0.3f %0.3f')
-
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp00, delimiter=";")
 
 
 
