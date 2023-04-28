@@ -63,7 +63,7 @@ class Transformations:
                     break
         
             lam = np.arctan2(Y, X)
-            flh.extend([fi, lam, h])
+            flh.extend([np.rad2deg(fi), np.rad2deg(lam), h])
         return(flh)
 
 
@@ -74,7 +74,7 @@ class Transformations:
         """
     def filh2XYZ(self, fi, lam, h):
         XYZ = []
-        for fi,lam,h in zip(fi,lam,h):
+        for fi, lam, h in zip(fi, lam, h):
             while True:
                 N = self.Npu(fi)
                 X = (N + h) * np.cos(fi) * np.cos(lam)
@@ -83,8 +83,8 @@ class Transformations:
                 Z = (N * (1 - self.e2) + h) * np.sin(fi)
                 if abs(Xp - X) < (0.000001/206265):
                     break
-                
-                XYZ.append(X, Y, Z)
+            
+            XYZ.append([X, Y, Z])
         return(XYZ)
 
 
@@ -119,10 +119,9 @@ class Transformations:
         lam = np.arctan(Y0 / X0)
         
         R_neu = self.Rneu(fi, lam)
-        for X, Y, Z in zip(X, Y, Z):
-            X_sr = [X - X0, Y - Y0, Z - Z0] 
-            X_rneu = R_neu.T@X_sr
-            neu.append(X_rneu.T)
+        X_sr = [X - X0, Y - Y0, Z - Z0] 
+        X_rneu = R_neu.T@X_sr
+        neu.append(X_rneu.T)
             
         return(neu)
 
@@ -135,6 +134,7 @@ class Transformations:
     def cale92(self, fi, lam):
         lam0 = (19*np.pi)/180
         m = 0.9993
+        wsp = []
         for fi,lam in zip(fi,lam):
             b2 = (self.a**2) * (1-self.e2)   #krotsza polowa
             e2p = (self.a**2 - b2 ) / b2   #drugi mimosrod elipsy
@@ -149,13 +149,9 @@ class Transformations:
                         
             x92 = xgk*m - 5300000
             y92 = ygk*m + 500000
-            x92 = '%0.3f' %x92
-            y92 = '%0.3f' %y92
-                
-            xy92 = []
-            xy92.append(x92, y92) 
+            wsp.append([x92, y92]) 
             
-        return(xy92)
+        return(wsp)
             
             
             
@@ -166,6 +162,8 @@ class Transformations:
 
     def cale00(self, fi, lam):
         m=0.999923
+        print(fi, lam)
+        wsp = []
         for fi,lam in zip(fi,lam):
             lam0=0 
             strefa = 0
@@ -197,13 +195,12 @@ class Transformations:
                      
             x00 = xgk * m
             y00 = ygk * m + strefa*1000000 + 500000
-            x00 = '%0.3f' %x00
-            y00 = '%0.3f' %y00
+            wsp.append([x00, y00])
             
-        xy00 = []
+
         
-        xy00.append(x00, y00)
-        return(xy00)  
+
+        return(wsp)  
     
     
     
@@ -218,8 +215,8 @@ class Transformations:
             np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", blh, delimiter=";")
 
         elif funkcja == "BLH_XYZ":
-            fi = np.deg2rad((data[:,0]))
-            lam = np.deg2rad((data[:,1]))
+            fi = np.deg2rad(data[:,0])
+            lam = np.deg2rad(data[:,1])
             h = data[:,2]
             XYZ = self.filh2XYZ(fi, lam, h)
             np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", XYZ, delimiter=";")
