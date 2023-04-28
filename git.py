@@ -210,9 +210,9 @@ class Transformations:
     def pliczek(self, plik, funkcja):
         data = np.genfromtxt(plik,  delimiter = " ")
         if funkcja == "XYZ_BLH":
-            X = data[0,0]
-            Y = data[0,1]
-            Z = data[0,2]
+            X = data[:,0]
+            Y = data[:,1]
+            Z = data[:,2]
                 # to zmienic e starej wersji, bedzie latwiej
             blh = self.hirvonen(X, Y, Z)
             np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", blh, delimiter=";")
