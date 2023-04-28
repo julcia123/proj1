@@ -224,9 +224,9 @@ class Transformations:
     def pliczek(self, plik, funkcja):
         data = np.genfromtxt(plik,  delimiter = " ")
         if funkcja == "XYZ_BLH":
-            X = data[0]
-            Y = data[1]
-            Z = data[2]
+            X = data[0,0]
+            Y = data[0,1]
+            Z = data[0,2]
                 # to zmienic e starej wersji, bedzie latwiej
             blh = self.hirvonen(X, Y, Z)
             np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", blh, delimiter=";")
@@ -234,12 +234,11 @@ class Transformations:
                  #   file.write('\n'.join([';'.join([str(cell) for cell in row]) for row in blh]))
 
         elif funkcja == "BLH_XYZ":
-            for e in data:
-                fi = np.deg2rad(float(data[e,0]))
-                lam = np.deg2rad(float(data[e,1]))
-                h = data[e,2]
-                XYZ = self.filh2XYZ(fi, lam, h)
-                np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", XYZ, delimiter=";")
+            fi = np.deg2rad(float(data[0,0]))
+            lam = np.deg2rad(float(data[0,1]))
+            h = data[0,2]
+            XYZ = self.filh2XYZ(fi, lam, h)
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", XYZ, delimiter=";")
                     
             
         elif funkcja == "XYZ_NEU":
@@ -254,18 +253,16 @@ class Transformations:
             np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", neu, delimiter=";")
         
         elif funkcja == "BL_PL1992":
-            for e in data:
-                fi = np.deg2rad(data[e,0])
-                lam = np.deg2rad(data[e,1])
-                wsp92 = self.cale92(fi, lam)
-                np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp92, delimiter=";")
+            fi = np.deg2rad(data[0,0])
+            lam = np.deg2rad(data[0,1])
+            wsp92 = self.cale92(fi, lam)
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp92, delimiter=";")
             
         elif funkcja == "BL_PL2000":
-            for e in data:
-                fi = np.deg2rad(data[e,0])
-                lam = np.deg2rad(data[e,1])
-                wsp00 = self.cale00(fi, lam)
-                np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp00, delimiter=";")
+            fi = np.deg2rad(data[0,0])
+            lam = np.deg2rad(data[0,1])
+            wsp00 = self.cale00(fi, lam)
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp00, delimiter=";")
 
 
 
