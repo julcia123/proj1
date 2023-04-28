@@ -224,13 +224,12 @@ class Transformations:
     def pliczek(self, plik, funkcja):
         data = np.genfromtxt(plik,  delimiter = " ")
         if funkcja == "XYZ_BLH":
-            for e in data:
-                X = data[e,0]
-                Y = data[e,1]
-                Z = data[e,2]
-                # to zmienic ze starej wersji, bedzie latwiej
-                blh = self.hirvonen(X, Y, Z)
-                np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", blh, delimiter=";")
+            X = data[0]
+            Y = data[1]
+            Z = data[2]
+                # to zmienic e starej wersji, bedzie latwiej
+            blh = self.hirvonen(X, Y, Z)
+            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", blh, delimiter=";")
                 #with open(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", 'w') as file:
                  #   file.write('\n'.join([';'.join([str(cell) for cell in row]) for row in blh]))
 
