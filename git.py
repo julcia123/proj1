@@ -196,10 +196,6 @@ class Transformations:
             x00 = xgk * m
             y00 = ygk * m + strefa*1000000 + 500000
             wsp.append([x00, y00])
-            
-
-        
-
         return(wsp)  
     
     
@@ -212,14 +208,14 @@ class Transformations:
             Z = data[:,2]
                 # to zmienic e starej wersji, bedzie latwiej
             blh = self.hirvonen(X, Y, Z)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", blh, delimiter=";")
+            np.savetxt(f"WYNIK_{funkcja}.txt", blh, delimiter=";")
 
         elif funkcja == "BLH_XYZ":
             fi = np.deg2rad(data[:,0])
             lam = np.deg2rad(data[:,1])
             h = data[:,2]
             XYZ = self.filh2XYZ(fi, lam, h)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", XYZ, delimiter=";")
+            np.savetxt(f"WYNIK_{funkcja}.txt",XYZ, delimiter=";")
             
         elif funkcja == "XYZ_NEU":
             X0 = data[0,0]
@@ -229,38 +225,42 @@ class Transformations:
             Y = data[1,1]
             Z = data[1,2]
             neu = self.xyz2neup(X, Y, Z, X0, Y0, Z0)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", neu, delimiter=";")
+            np.savetxt(f"WYNIK_{funkcja}.txt", neu, delimiter=";")
             
         elif funkcja == "BL_PL1992":
             fi = np.deg2rad(data[:,0])
             lam = np.deg2rad(data[:,1])
             wsp92 = self.cale92(fi, lam)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp92, delimiter=";")
+            np.savetxt(f"WYNIK_{funkcja}.txt", wsp92, delimiter=";")
             
         elif funkcja == "BL_PL2000":
             fi = np.deg2rad(data[:,0])
             lam = np.deg2rad(data[:,1])
             wsp00 = self.cale00(fi, lam)
-            np.savetxt(f"C:/Users/48531/Desktop/stoodia v2/infa 2/PROJEKT 1/WYNIK_{funkcja}.txt", wsp00, delimiter=";")
+            np.savetxt(f"WYNIK_{funkcja}.txt", wsp00, delimiter=";")
 
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Podaj plik")
-    parser.add_argument("-plik", type = str, help = "Podaj nazwę pliku, w którym znajdują się dane wejsciowe (ps. oprócz nazwy podaj rozszerzenie:)")
-    parser.add_argument("-elip", type = str, help = "Wybierz elipsoidę, na której ma wykonać się transformacja, wpisz jedną: 'WGS84', 'GRS80', 'Elipsoida Krasowskiego' ")
-    parser.add_argument("-funkcja", type = str, help = "Wybierz transformację jaką chcesz obliczyć: 'XYZ_BLH', 'BLH_XYZ', 'XYZ_NEU' ")
-    args = parser.parse_args()
-
+    try:
+        parser = argparse.ArgumentParser(description="Podaj plik")
+        parser.add_argument("-plik", type = str, help = "Podaj nazwę pliku, w którym znajdują się dane wejsciowe (ps. oprócz nazwy podaj rozszerzenie:)")
+        parser.add_argument("-elip", type = str, help = "Wybierz elipsoidę, na której ma wykonać się transformacja, wpisz jedną: 'WGS84', 'GRS80', 'Elipsoida Krasowskiego' ")
+        parser.add_argument("-funkcja", type = str, help = "Wybierz transformację jaką chcesz obliczyć: 'XYZ_BLH', 'BLH_XYZ', 'XYZ_NEU' ")
+        args = parser.parse_args()
+    except SyntaxError:
+        print(f"Niestety nie ma takiego pliku. Spróbuj podać pełną scieżkę do pliku lub upewnij się że wpisujesz dobrą nazwę")
                    
     
     elip = {'WGS84':[6378137.000, 0.00669438002290], 'GRS80':[6378137.000, 0.00669438002290], 'Elipsoida Krasowskiego':[6378245.000, 0.00669342162296]}
     funkcja = {'XYZ_BLH' : 'hirvonen', 'BLH_XYZ' : 'filh2XYZ', 'XYZ_NEU' : 'xyz2neup', 'BL_PL1992' : 'cale92', 'BL_PL2000' : 'cale00'}
         
-    geo = Transformations(elip[args.elip.upper()])
-    # bleble = geo.pliczek(args.plik, funkcja[args.funkcja.upper()])
-    bleble = geo.pliczek(args.plik, args.funkcja.upper())
-    print("Zapisano")
+    try:
+        geo = Transformations(elip[args.elip.upper()])
+        finito = geo.pliczek(args.plik, args.funkcja.upper())
+        print("Zapisano")
+    except KeyError():
+        print(f"Podana funkcja/elipsoida nie istnieją, proszę upewnij się, że korzystasz z istniejących elipsoid")
         
             
 
