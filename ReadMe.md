@@ -54,9 +54,10 @@ Dostępne transformacje:
   ```sh
    Zapisano
   ```
-  Ścieżka zapisu pliku wynikowego:
+  Pliku wynikowy zapisuje się pod nazwą:
   ```sh
-  C:/Users
+  "WYNIK_{funkcja}.txt"
+  (gdzie {funkcja} oznacza nazwę transformacji, którą chcemy wykonać)
   ```
   
   
@@ -95,6 +96,8 @@ Dostępne transformacje:
   ```
   otrzymujemy wyniki (kolejno n, e, u)
   
+  Ważne jest, aby współrzędne punktów podane zostały w odpowiedniej kolejności - jako pierwsze podać należy współrzędne początku układu NEU (x0, y0), a dopiero potem współrzędne, do których policzyć chcemy wektor. Stąd, żeby otrzymać jeden punkt wyjściowy należy wprowadzić dane aż dwóch punktów wejściowych.
+  
   BL ---> XY PL1992
   dla danych z pliku 'bl-pl.txt' (kolejno fi, lambda)
   ```sh
@@ -119,4 +122,10 @@ Dostępne transformacje:
   5.763372029424777254e+06   6.431328112376346253e+06
   ```
    
+   
+   ZNANE BŁĘDY
+   ```sh
+      - zawarte w kodzie transformacje nie działają, gdy użytkownik próbuje wykonać je na elipsoidzie Krasowskiego
+      - tranformacje PL1992 i PL2000 dają niepoprawne wyniki, gdy użytkownik próbuje wykonać je na elipspidzie Krasowskiego
+   ```
  
