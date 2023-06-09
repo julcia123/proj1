@@ -261,8 +261,14 @@ if __name__ == "__main__":
         print("Zapisano")
     except KeyError():
         print(f"Podana funkcja/elipsoida nie istnieją, proszę upewnij się, że korzystasz z istniejących elipsoid")
-        
-            
+    except AttributeError:
+        print("Podana funkcja/elipsoida nie istnieje, proszę wprowadzić dostępne wartosci.")
+    except FileNotFoundError:
+        print("Nie znaleziono takiego pliku. Proszę spróbować wprowadzić inny plik.")
+    except IndexError:
+        print("Nieodpowiedni format pliku. Proszę wprowadzić dane do pliku tak jak pokazano w przyładzie.")
+    except ValueError:
+        print("Nieodpowiedni format pliku. Proszę wprowadzić dane do pliku tak jak pokazano w przyładzie.")
 
 
 
