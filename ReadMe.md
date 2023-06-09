@@ -60,6 +60,13 @@ Dostępne transformacje:
   (gdzie {funkcja} oznacza nazwę transformacji, którą chcemy wykonać)
   ```
   
+  Przykładowe wywołanie programu:
+  ```sh
+   python skrypt.py -plik dane.txt -elip GRS80 -funkcja XYZ_BLH
+   lub
+   python skrypt.py -plik dane.txt -elip WGS84 -funkcja BL_PL1992
+  ```
+  
   
   Przykładowe transformacje:
   
@@ -69,10 +76,14 @@ Dostępne transformacje:
   12345.789 65789.003 36674.123
   11111.222 22222.343 55555.332
   ```
-  otrzymujemy wyniki (kolejno fi, lambda, h)
+  otrzymujemy wyniki (w kolejnych linijkach fi1, l1, h1, fi2, l2, h2, ...)
   ```sh
-  4.498849871596222982e+01   7.937163647711760461e+01   -6.294189244106777012e+06
-  7.564029626858634003e+01   6.343484465985566345e+01   -6.298088199815715663e+06
+  4.498849871596222982e+01   
+  7.937163647711760461e+01   
+  -6.294189244106777012e+06
+  7.564029626858634003e+01   
+  6.343484465985566345e+01   
+  -6.298088199815715663e+06
   ```
   
   BLH ---> XYZ
